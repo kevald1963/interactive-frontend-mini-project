@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="assets/css/style.css" type="text/css" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/js/github-information.js"></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -25,7 +28,7 @@
                 <div class="row bg-color-name-title">
                     <div class="heading">
                         <h1 class="name">Rosie Odenkirk</h1>
-                        <h2 class="title"> Full Stack Developer</h2>
+                        <h2 class="title">Full Stack Developer</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -61,6 +64,7 @@
             </div>
 
             <div class="center-form">
+                <!-- GitHub username added here to retrieve a list of GitHub repositories owned by the user. -->
                 <input type="text" id="gh-username" value="octocat" oninput="fetchGitHubInformation()">
                 <div id="gh-user-data" class="clearfix"></div>
                 <div id="gh-repo-data" class="clearfix"></div>

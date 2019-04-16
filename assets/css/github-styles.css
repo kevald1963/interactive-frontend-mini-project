@@ -1,11 +1,9 @@
-@import url('http://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 br {
   display: block;
   line-height: 1.6em;
 }
-
-
 
 ol,
 ul {
@@ -51,8 +49,6 @@ img {
   max-width: 100%;
 }
 
-
-
 /* page structure */
 
 #search-area {
@@ -80,7 +76,6 @@ img {
   height: 200px;
   margin: 0 auto;
 }
-
 
 /* page content styles */
 
