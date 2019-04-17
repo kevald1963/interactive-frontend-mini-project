@@ -45,6 +45,10 @@ function repoInformationHTML(repos) {
 
 function fetchGitHubInformation(event) {
     
+    // Initialise the reporting data fields using jQuery.
+    $("#gh-user-data").html("");
+    $("#gh-repo-data").html("");
+
     // Use jQuery to retrieve the username entered in the input field.
     var username = $("#gh-username").val();
     // If username is blank, put a message in the username field using jQuery.
@@ -95,3 +99,7 @@ function fetchGitHubInformation(event) {
         }
     );
 };
+
+// Fetch the GitHub Information when the DOM is fully loaded.
+// This will display the defauly 'octocat' profile on start up.
+$(document).ready(fetchGitHubInformation);
