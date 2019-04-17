@@ -15,6 +15,34 @@ function userInformationHTML(user) {
         </div>`;
 };
 
+function repoInformationHTML(repos) {
+    // Check array length to see if any information returned.
+    // A zero length indicates nothing returned.
+    if (repos.length == 0) {
+        return `<div class="clearfix repo-list">No repositories found!</div>`;
+    };
+
+    // The map method works like a forEach, but returns an array with the results of the function.
+    var listItemsHTML = repos.map(function(repo) {
+        return `<li>
+                    <a href ="${repo.html_url}" target="_blank">${repo.name}</a>
+                </li>`;
+    });
+    
+    // The join method below on the array, joins everything within the array
+    // into one string. However a newline is added between each element so  
+    // that each array item is displayed individually. This is a a clever
+    // way of avoiding having to iterate through the array once again.
+    return `<div class="clearfix repo-list">
+                <p>
+                    <strong>Repository List:</strong>
+                </p>    
+                <ul>
+                    ${listItemsHTML.join("\n")}
+                </ul>
+            </div>`;
+};
+
 function fetchGitHubInformation(event) {
     
     // Use jQuery to retrieve the username entered in the input field.
@@ -35,29 +63,35 @@ function fetchGitHubInformation(event) {
              <img src="assets/css/loader.gif" alt="loading..." />
         </div>`);
     
-    // Make a "promise" (a bit like an 'if.. then' statement but on e that waits for a response).
-    // This is part of the jQuery library.
+    // Make a "promise" - i.e wait for a response to be made before doing something with that response!
+    // Part of the jQuery library.
     $.when(
-        // Get GitHub API data, corresponding to the entered username, in JSON format i.e. as an object.
-        $.getJSON(`https://api.github.com/users/${username}`)
-    // When we've got the data then display the response in the user-data field.   
+        // 1. Get GitHub API data, corresponding to the entered username, in JSON format i.e. as an object.
+        // 2. Get the repository information as well.
+        // Note the comma between the two JSON statements! This was missed originally
+        // causing an error that was real hard to find (complained about missing bracket)!
+        $.getJSON(`https://api.github.com/users/${username}`),
+        $.getJSON(`https://api.github.com/users/${username}/repos`)
+    // When we get the data, then display the responses in the user-data & repo-data fields, respectively.
     ).then (
-        function(response) {
-            var userData = response;
-            // Call our bespoke function 'userInformationHTML' with the API response as a parameter.
+        function(firstResponse, secondResponse) {
+            // Note that if more than one type of data is requested then all data is put in 
+            // the first cell of separate arrays for each.
+            var userData = firstResponse[0];
+            var repoData = secondResponse[0];
+            // Call our bespoke functions with the API response as a parameter.
             $("#gh-user-data").html(userInformationHTML(userData));
+            $("#gh-repo-data").html(repoInformationHTML(repoData));
         },
         function(errorResponse) {
             // 'Page Not Found' type error.
             if(errorResponse.status === 404) {
                 $("#gh-user-data").html(`<h2>No info found for user ${username}.</h2>`);
-                
             } else {
                 // Display the message 'as is' for any other type of error.
                 console.log(errorResponse);
                 $("#gh-user-data").html(`<h2>Error: ${errorResponse.responseJSON.message}.</h2>`);
             }
-
         }
     );
 };
