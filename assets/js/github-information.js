@@ -89,8 +89,15 @@ function fetchGitHubInformation(event) {
         },
         function(errorResponse) {
             // 'Page Not Found' type error.
-            if(errorResponse.status === 404) {
+            if (errorResponse.status === 404) {
                 $("#gh-user-data").html(`<h2>No info found for user ${username}.</h2>`);
+            // Too many API calls; 'API throttling' has been invoked by GitHub, so
+            // display a more user-friendly message than the standard one from GitHub.
+            } else if (errorResponse.status === 403) {
+                // "X-RateLimit-Reset" is a Unix timestamp. We multiply it by 1000 and 
+                // convert it to a Date object to make it readable for the webpage user.
+                var resetTime = new Date(errorResponse.getResponseHeader("X-RateLimit-Reset") * 1000);
+                $("#gh-user-data").html(`<h4>Too many requests. Please wait until ${resetTime.toLocaleTimeString()}.</h4>`);
             } else {
                 // Display the message 'as is' for any other type of error.
                 console.log(errorResponse);
